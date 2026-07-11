@@ -70,13 +70,17 @@ export function createHttpApp(config: ServerConfig, runtime: WorkspaceRuntime) {
       if (!transport && !sessionId && isInitializeRequest(req.body)) {
         transport = new StreamableHTTPServerTransport({
           sessionIdGenerator: () => randomUUID(),
-          onsessioninitialized: (id) => transports.set(id, transport!),
+          onsessioninitialized: (id) => {
+            transports.set(id, transport!);
+          },
         });
         transport.onclose = () => {
           if (transport?.sessionId) transports.delete(transport.sessionId);
         };
         const server = await createMcpServer(runtime);
-        await server.connect(transport);
+        // MCP SDK v1's concrete transport and Transport interface differ only in
+        // optional callback declarations under exactOptionalPropertyTypes.
+        await server.connect(transport as Parameters<typeof server.connect>[0]);
       }
       if (!transport) {
         res.status(400).json({ jsonrpc: "2.0", error: { code: -32000, message: "Invalid or missing MCP session." }, id: null });

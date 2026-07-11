@@ -4,7 +4,7 @@ export interface ServerConfig {
   workspaceRoot: string;
   host: string;
   port: number;
-  apiToken?: string;
+  apiToken: string | undefined;
   allowedHosts: Set<string>;
   allowedOrigins: Set<string>;
   commandAllowlist: Set<string>;
@@ -13,7 +13,7 @@ export interface ServerConfig {
   maxCommandTimeoutMs: number;
   maxCheckpointBytes: number;
   maxCheckpointFiles: number;
-  widgetDomain?: string;
+  widgetDomain: string | undefined;
 }
 
 const DEFAULT_COMMANDS = [

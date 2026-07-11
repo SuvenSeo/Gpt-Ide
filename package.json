@@ -16,7 +16,7 @@
     "dev:widget": "npm run dev -w @gpt-ide/widget",
     "dev:server": "npm run dev -w @gpt-ide/server",
     "test": "npm run test -w @gpt-ide/core && npm run test -w @gpt-ide/widget && npm run test -w @gpt-ide/server",
-    "typecheck": "npm run typecheck -ws --if-present",
+    "typecheck": "npm run build -w @gpt-ide/core && npm run typecheck -w @gpt-ide/widget && npm run typecheck -w @gpt-ide/server",
     "lint": "eslint .",
     "format": "prettier --write .",
     "check": "npm run typecheck && npm test && npm run build"

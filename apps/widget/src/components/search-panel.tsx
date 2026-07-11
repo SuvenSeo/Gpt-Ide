@@ -13,7 +13,11 @@ export function SearchPanel() {
   const [filePattern, setFilePattern] = useState("");
   const [regex, setRegex] = useState(false);
   const [caseSensitive, setCaseSensitive] = useState(false);
-  const submit = () => void runWorkspaceSearch(query, { regex, caseSensitive, filePattern: filePattern || undefined });
+  const submit = () => void runWorkspaceSearch(query, {
+    regex,
+    caseSensitive,
+    ...(filePattern ? { filePattern } : {}),
+  });
   return (
     <section className="side-panel">
       <PanelHeader title="Search" />
