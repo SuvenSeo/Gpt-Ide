@@ -17,7 +17,20 @@ jobs:
         with:
           node-version: 22
       - run: npm install --silent
-      - run: npm run typecheck
+      - name: Typecheck
+        id: typecheck
+        continue-on-error: true
+        run: npm run typecheck > typecheck.log 2>&1
+      - name: Upload typecheck diagnostics
+        if: steps.typecheck.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: typecheck-log
+          path: typecheck.log
+          retention-days: 3
+      - name: Fail on typecheck errors
+        if: steps.typecheck.outcome == 'failure'
+        run: cat typecheck.log && exit 1
       - run: npm test
       - run: npm run build
       - run: npm run lint
