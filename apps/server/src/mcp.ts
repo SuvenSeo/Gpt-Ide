@@ -92,7 +92,14 @@ export async function createMcpServer(runtime: WorkspaceRuntime): Promise<McpSer
     maxResults: z.number().int().min(1).max(2000).default(200),
     filePattern: z.string().optional(),
   }), async (input) => {
-    const search = await runtime.search.search(input);
+    const search = await runtime.search.search({
+      query: input.query,
+      path: input.path,
+      regex: input.regex,
+      caseSensitive: input.caseSensitive,
+      maxResults: input.maxResults,
+      ...(input.filePattern ? { filePattern: input.filePattern } : {}),
+    });
     return result({ kind: "search", query: input.query, ...search }, `Found ${search.matches.length} matches.`);
   });
 
@@ -106,7 +113,11 @@ export async function createMcpServer(runtime: WorkspaceRuntime): Promise<McpSer
     staged: z.boolean().default(false),
     contextLines: z.number().int().min(0).max(50).default(3),
   }), async (input) => {
-    const diff = await runtime.git.diff(input);
+    const diff = await runtime.git.diff({
+      staged: input.staged,
+      contextLines: input.contextLines,
+      ...(input.path ? { path: input.path } : {}),
+    });
     return result({ kind: "git-diff", ...input, ...diff }, diff.diff ? "Git diff loaded." : "No Git diff is present.");
   });
 
@@ -130,7 +141,10 @@ export async function createMcpServer(runtime: WorkspaceRuntime): Promise<McpSer
     createCheckpoint: z.boolean().default(true),
   }), async ({ path, content, expectedHash, createOnly, createCheckpoint }) => {
     const checkpoint = await checkpointBefore(runtime, createCheckpoint, `Before saving ${path}`);
-    const file = await runtime.files.writeText(path, content, { expectedHash, createOnly });
+    const file = await runtime.files.writeText(path, content, {
+      createOnly,
+      ...(expectedHash ? { expectedHash } : {}),
+    });
     return result({ kind: "saved-file", file, checkpoint: checkpoint ?? null }, `Saved ${file.path}.`);
   });
 
@@ -179,7 +193,11 @@ export async function createMcpServer(runtime: WorkspaceRuntime): Promise<McpSer
     createCheckpoint: z.boolean().default(false),
   }), async ({ executable, args, cwd, timeoutMs, input, createCheckpoint }) => {
     const checkpoint = await checkpointBefore(runtime, createCheckpoint, `Before running ${executable}`);
-    const execution = await runtime.processes.run(executable, args, { cwd, timeoutMs, input });
+    const execution = await runtime.processes.run(executable, args, {
+      cwd,
+      ...(timeoutMs !== undefined ? { timeoutMs } : {}),
+      ...(input !== undefined ? { input } : {}),
+    });
     return result({ kind: "command", executable, args, cwd, execution, checkpoint: checkpoint ?? null }, `${executable} exited with code ${execution.exitCode}.`);
   });
 

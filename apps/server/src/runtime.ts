@@ -23,8 +23,8 @@ export interface WorkspaceRuntime {
   summary(): Promise<Record<string, unknown>>;
 }
 
-export function createRuntime(config: ServerConfig): WorkspaceRuntime {
-  const paths = new PathPolicy(config.workspaceRoot);
+export async function createRuntime(config: ServerConfig): Promise<WorkspaceRuntime> {
+  const paths = await PathPolicy.create(config.workspaceRoot);
   const files = new FileService(paths, { maxFileBytes: config.maxFileBytes });
   const search = new SearchService(paths, { maxSearchFileBytes: config.maxFileBytes });
   const git = new GitService(paths);

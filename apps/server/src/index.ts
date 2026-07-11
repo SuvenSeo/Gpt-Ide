@@ -3,7 +3,7 @@ import { createHttpApp } from "./http.js";
 import { createRuntime } from "./runtime.js";
 
 const config = loadConfig();
-const runtime = createRuntime(config);
+const runtime = await createRuntime(config);
 const app = createHttpApp(config, runtime);
 
 app.listen(config.port, config.host, () => {
