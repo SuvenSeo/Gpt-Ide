@@ -23,7 +23,7 @@ jobs:
         run: npm run typecheck > typecheck.log 2>&1
       - name: Upload typecheck diagnostics
         if: steps.typecheck.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: typecheck-log
           path: typecheck.log
@@ -39,7 +39,7 @@ jobs:
         run: npm run lint > lint.log 2>&1
       - name: Upload lint diagnostics
         if: steps.lint.outcome == 'failure'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: lint-log
           path: lint.log
