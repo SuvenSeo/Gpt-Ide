@@ -67,6 +67,12 @@ function applyStructured(content: Record<string, unknown>): void {
 }
 
 export async function initializeIde(): Promise<() => void> {
+  const openai = typeof window !== "undefined" ? window.openai : undefined;
+  state().addOutput(
+    openai
+      ? `[diag] window.openai keys: ${Object.keys(openai).join(", ") || "(none)"}`
+      : "[diag] window.openai is undefined",
+  );
   const initial = getStructuredContent(initialToolOutput());
   if (Object.keys(initial).length > 0) applyStructured(initial);
   const unsubscribe = subscribeToToolResults((value) => applyStructured(getStructuredContent(value)));

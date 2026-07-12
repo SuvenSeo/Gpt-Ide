@@ -49,7 +49,17 @@ class PostMessageBridge {
   request(method: string, params: Record<string, unknown>): Promise<unknown> {
     const id = this.nextId++;
     return new Promise((resolve, reject) => {
-      this.pending.set(id, { resolve, reject });
+      const timer = window.setTimeout(() => {
+        this.pending.delete(id);
+        reject(new Error(`Timed out waiting for a response to "${method}" (no ChatGPT host bridge detected).`));
+      }, 15_000);
+      this.pending.set(id, {
+        resolve: (value) => { window.clearTimeout(timer); resolve(value); },
+        reject: (reason) => {
+          window.clearTimeout(timer);
+          reject(reason instanceof Error ? reason : new Error(String(reason)));
+        },
+      });
       window.parent.postMessage({ jsonrpc: "2.0", id, method, params }, "*");
     });
   }
