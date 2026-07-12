@@ -22,7 +22,8 @@ export function BottomPanel() {
   const output = useIdeStore((state) => state.output);
   const gitDiff = useIdeStore((state) => state.gitDiff);
   const error = useIdeStore((state) => state.error);
-  const dirtyFiles = useIdeStore((state) => state.openFiles.filter((file) => file.dirty));
+  const openFiles = useIdeStore((state) => state.openFiles);
+  const dirtyFiles = openFiles.filter((file) => file.dirty);
   const loading = useIdeStore((state) => state.loading.has("command"));
   const scroll = useRef<HTMLPreElement>(null);
 
