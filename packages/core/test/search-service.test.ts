@@ -6,7 +6,7 @@ import test from "node:test";
 import { PathPolicy } from "../src/path-policy.ts";
 import { SearchService } from "../src/search-service.ts";
 
-test("finds matching lines and excludes dependency directories", async () => {
+void test("finds matching lines and excludes dependency directories", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "gpt-ide-search-"));
   await mkdir(path.join(root, "src"));
   await mkdir(path.join(root, "node_modules"));
@@ -19,7 +19,7 @@ test("finds matching lines and excludes dependency directories", async () => {
   assert.equal(result.matches[0]?.line, 2);
 });
 
-test("supports case-insensitive regular expressions", async () => {
+void test("supports case-insensitive regular expressions", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "gpt-ide-search-"));
   await writeFile(path.join(root, "file.txt"), "Hello WORLD\n");
   const service = new SearchService(await PathPolicy.create(root));

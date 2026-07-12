@@ -57,7 +57,7 @@ export function createHttpApp(config: ServerConfig, runtime: WorkspaceRuntime) {
     next();
   });
 
-  app.get("/health", async (_req, res) => {
+  app.get("/health", (_req, res) => {
     res.json({ ok: true, service: "gpt-ide", workspace: runtime.config.workspaceRoot });
   });
 

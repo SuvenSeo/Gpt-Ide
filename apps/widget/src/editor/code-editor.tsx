@@ -25,9 +25,9 @@ import { languageForPath } from "../lib/language";
 interface CodeEditorProps {
   path: string;
   content: string;
-  onChange(content: string): void;
-  onSelection(selection: string): void;
-  onSave(): void;
+  onChange: (content: string) => void;
+  onSelection: (selection: string) => void;
+  onSave: () => void;
 }
 
 function languageExtension(path: string) {

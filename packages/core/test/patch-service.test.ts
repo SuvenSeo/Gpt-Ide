@@ -10,14 +10,14 @@ import { PatchService, PatchValidationError } from "../src/patch-service.ts";
 
 const exec = promisify(execFile);
 
-test("rejects patch paths that escape the workspace", async () => {
+void test("rejects patch paths that escape the workspace", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "gpt-ide-patch-"));
   const service = new PatchService(await PathPolicy.create(root));
   const patch = "--- a/../../outside.txt\n+++ b/../../outside.txt\n@@ -1 +1 @@\n-old\n+new\n";
   await assert.rejects(() => service.apply(patch), PatchValidationError);
 });
 
-test("checks and applies a valid unified diff", async () => {
+void test("checks and applies a valid unified diff", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "gpt-ide-patch-"));
   await exec("git", ["init", "-b", "main"], { cwd: root });
   await writeFile(path.join(root, "file.txt"), "old\n");

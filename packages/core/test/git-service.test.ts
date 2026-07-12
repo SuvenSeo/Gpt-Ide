@@ -10,7 +10,7 @@ import { PathPolicy } from "../src/path-policy.ts";
 
 const exec = promisify(execFile);
 
-test("reports branch, changed files, and a diff", async () => {
+void test("reports branch, changed files, and a diff", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "gpt-ide-git-"));
   await exec("git", ["init", "-b", "main"], { cwd: root });
   await exec("git", ["config", "user.email", "test@example.com"], { cwd: root });

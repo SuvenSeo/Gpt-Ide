@@ -42,7 +42,7 @@ export async function createMcpServer(runtime: WorkspaceRuntime): Promise<McpSer
   );
 
   const widgetHtml = await buildWidgetHtml();
-  registerAppResource(server, "gpt-ide-widget", WIDGET_URI, {}, async () => ({
+  registerAppResource(server, "gpt-ide-widget", WIDGET_URI, {}, () => ({
     contents: [{
       uri: WIDGET_URI,
       mimeType: RESOURCE_MIME_TYPE,

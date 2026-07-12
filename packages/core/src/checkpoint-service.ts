@@ -23,7 +23,7 @@ interface CheckpointManifest {
   bytes: number;
 }
 
-export interface CheckpointSummary extends CheckpointManifest {}
+export type CheckpointSummary = CheckpointManifest;
 
 export class CheckpointService {
   private readonly paths: PathPolicy;

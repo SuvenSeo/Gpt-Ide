@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { TOOL_CATALOG, WIDGET_URI } from "../src/tool-catalog.ts";
 
-test("publishes a complete, unique tool surface", () => {
+void test("publishes a complete, unique tool surface", () => {
   const names = TOOL_CATALOG.map((tool) => tool.name);
   assert.equal(new Set(names).size, names.length);
   assert.deepEqual(names, [
@@ -28,7 +28,7 @@ test("publishes a complete, unique tool surface", () => {
   ]);
 });
 
-test("marks tools with correct safety and widget metadata", () => {
+void test("marks tools with correct safety and widget metadata", () => {
   assert.match(WIDGET_URI, /^ui:\/\/gpt-ide\/workspace-v\d+\.html$/);
   for (const tool of TOOL_CATALOG) {
     assert.equal(typeof tool.description, "string");

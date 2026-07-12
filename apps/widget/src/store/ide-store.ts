@@ -34,27 +34,27 @@ interface IdeState {
   commandHistory: string[];
   execution: CommandExecution | undefined;
   output: string[];
-  setSummary(summary: WorkspaceSummary): void;
-  setDirectory(path: string, entries: WorkspaceEntry[]): void;
-  toggleDirectory(path: string): void;
-  openFile(file: OpenFile): void;
-  closeFile(path: string): void;
-  setActivePath(path: string | undefined): void;
-  updateFile(path: string, content: string): void;
-  markFileSaved(path: string, hash: string, modifiedAt: string, size: number): void;
-  setSelection(path: string, selection: string): void;
-  setActivityView(view: ActivityView): void;
-  setBottomPanel(panel: BottomPanel, open?: boolean): void;
-  setAiPanelOpen(open: boolean): void;
-  setLoading(key: string, active: boolean): void;
-  setError(error: string | undefined): void;
-  setSearch(query: string, matches: SearchMatch[], truncated: boolean): void;
-  setGit(status: GitStatus, diff?: string): void;
-  setGitDiff(diff: string): void;
-  setCheckpoints(checkpoints: Checkpoint[]): void;
-  setCommand(line: string, cwd?: string): void;
-  setExecution(execution: CommandExecution, command: string): void;
-  addOutput(message: string): void;
+  setSummary: (summary: WorkspaceSummary) => void;
+  setDirectory: (path: string, entries: WorkspaceEntry[]) => void;
+  toggleDirectory: (path: string) => void;
+  openFile: (file: OpenFile) => void;
+  closeFile: (path: string) => void;
+  setActivePath: (path: string | undefined) => void;
+  updateFile: (path: string, content: string) => void;
+  markFileSaved: (path: string, hash: string, modifiedAt: string, size: number) => void;
+  setSelection: (path: string, selection: string) => void;
+  setActivityView: (view: ActivityView) => void;
+  setBottomPanel: (panel: BottomPanel, open?: boolean) => void;
+  setAiPanelOpen: (open: boolean) => void;
+  setLoading: (key: string, active: boolean) => void;
+  setError: (error: string | undefined) => void;
+  setSearch: (query: string, matches: SearchMatch[], truncated: boolean) => void;
+  setGit: (status: GitStatus, diff?: string) => void;
+  setGitDiff: (diff: string) => void;
+  setCheckpoints: (checkpoints: Checkpoint[]) => void;
+  setCommand: (line: string, cwd?: string) => void;
+  setExecution: (execution: CommandExecution, command: string) => void;
+  addOutput: (message: string) => void;
 }
 
 function updateSet(source: Set<string>, key: string, add: boolean): Set<string> {

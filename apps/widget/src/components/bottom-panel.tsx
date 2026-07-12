@@ -1,5 +1,6 @@
 import { AlertTriangle, ChevronDown, ChevronUp, CirclePlay, TerminalSquare, Text, X } from "lucide-react";
-import { FormEvent, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import type { FormEvent } from "react";
 import { executeCommand } from "../actions";
 import { useIdeStore } from "../store/ide-store";
 import type { BottomPanel as BottomPanelType } from "../types";

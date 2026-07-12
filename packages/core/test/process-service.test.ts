@@ -7,7 +7,7 @@ import { CommandPolicy } from "../src/command-policy.ts";
 import { PathPolicy } from "../src/path-policy.ts";
 import { ProcessService } from "../src/process-service.ts";
 
-test("runs an allowlisted executable without a shell", async () => {
+void test("runs an allowlisted executable without a shell", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "gpt-ide-process-"));
   const service = new ProcessService(await PathPolicy.create(root), new CommandPolicy(["node"]));
   const result = await service.run("node", ["-e", "process.stdout.write('ok')"]);
@@ -16,7 +16,7 @@ test("runs an allowlisted executable without a shell", async () => {
   assert.equal(result.timedOut, false);
 });
 
-test("truncates output at the configured byte limit", async () => {
+void test("truncates output at the configured byte limit", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "gpt-ide-process-"));
   const service = new ProcessService(await PathPolicy.create(root), new CommandPolicy(["node"]), {
     maxOutputBytes: 8,

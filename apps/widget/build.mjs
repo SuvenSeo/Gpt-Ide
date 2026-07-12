@@ -1,10 +1,11 @@
 import { build } from "esbuild";
 import { rm } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 
 await rm(new URL("./dist", import.meta.url), { recursive: true, force: true });
 await build({
-  entryPoints: { widget: new URL("./src/index.tsx", import.meta.url).pathname },
-  outdir: new URL("./dist", import.meta.url).pathname,
+  entryPoints: { widget: fileURLToPath(new URL("./src/index.tsx", import.meta.url)) },
+  outdir: fileURLToPath(new URL("./dist", import.meta.url)),
   bundle: true,
   format: "esm",
   platform: "browser",

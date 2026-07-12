@@ -6,7 +6,7 @@ import test from "node:test";
 import { CheckpointService } from "../src/checkpoint-service.ts";
 import { PathPolicy } from "../src/path-policy.ts";
 
-test("creates and restores a checkpoint while excluding dependency folders", async () => {
+void test("creates and restores a checkpoint while excluding dependency folders", async () => {
   const root = await mkdtemp(path.join(tmpdir(), "gpt-ide-checkpoint-"));
   await mkdir(path.join(root, "src"));
   await mkdir(path.join(root, "node_modules"));

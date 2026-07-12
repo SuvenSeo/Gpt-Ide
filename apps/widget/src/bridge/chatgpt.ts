@@ -26,8 +26,12 @@ class PostMessageBridge {
 
   constructor() {
     window.addEventListener("message", (event) => {
-      if (event.source !== window.parent || !event.data || event.data.jsonrpc !== "2.0") return;
-      const message = event.data as { id?: number; result?: unknown; error?: unknown; method?: string; params?: unknown };
+      if (event.source !== window.parent) return;
+      const message = event.data as
+        | { id?: number; result?: unknown; error?: unknown; method?: string; params?: unknown; jsonrpc?: string }
+        | null
+        | undefined;
+      if (!message || message.jsonrpc !== "2.0") return;
       if (typeof message.id === "number") {
         const pending = this.pending.get(message.id);
         if (!pending) return;

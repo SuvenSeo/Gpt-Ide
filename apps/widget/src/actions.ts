@@ -23,6 +23,10 @@ function state() {
   return useIdeStore.getState();
 }
 
+function asString(value: unknown, fallback: string): string {
+  return typeof value === "string" ? value : fallback;
+}
+
 async function guarded<T>(key: string, operation: () => Promise<T>): Promise<T | undefined> {
   state().setLoading(key, true);
   state().setError(undefined);
@@ -43,19 +47,19 @@ function applyStructured(content: Record<string, unknown>): void {
   if (kind === "workspace" && content.summary) {
     state().setSummary(content.summary as WorkspaceSummary);
   } else if (kind === "directory") {
-    state().setDirectory(String(content.path ?? "."), (content.entries ?? []) as WorkspaceEntry[]);
+    state().setDirectory(asString(content.path, "."), (content.entries ?? []) as WorkspaceEntry[]);
   } else if (kind === "file" && content.file) {
     const file = content.file as Omit<OpenFile, "savedContent" | "dirty" | "selection">;
     state().openFile({ ...file, savedContent: file.content, dirty: false, selection: "" });
   } else if (kind === "git-status" && content.status) {
     state().setGit(content.status as GitStatus);
   } else if (kind === "git-diff") {
-    state().setGitDiff(String(content.diff ?? ""));
+    state().setGitDiff(asString(content.diff, ""));
   } else if (kind === "checkpoints") {
     state().setCheckpoints((content.checkpoints ?? []) as Checkpoint[]);
   } else if (kind === "search") {
     state().setSearch(
-      String(content.query ?? ""),
+      asString(content.query, ""),
       (content.matches ?? []) as SearchMatch[],
       Boolean(content.truncated),
     );

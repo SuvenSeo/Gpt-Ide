@@ -13,11 +13,16 @@
     "noEmit": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "target": "ES2024"
+    "target": "ES2024",
+    "allowJs": true,
+    "checkJs": false,
+    "allowImportingTsExtensions": true
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "vite.config.ts"
+    "vite.config.ts",
+    "build.mjs",
+    "test/**/*.ts"
   ]
 }
