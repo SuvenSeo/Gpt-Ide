@@ -1,8 +1,23 @@
 # GPT IDE
 
+[![CI](https://github.com/SuvenSeo/Gpt-Ide/actions/workflows/ci.yml/badge.svg)](https://github.com/SuvenSeo/Gpt-Ide/actions/workflows/ci.yml)
+
 A full coding workspace rendered **inside ChatGPT**. ChatGPT supplies the model conversation and tool decisions; GPT IDE supplies a sandboxed local workspace, code editor, repository search, Git inspection, terminal execution, patches, and rollback checkpoints through an MCP server.
 
 > This project does not automate or scrape the ChatGPT website. It is a ChatGPT App built with the Apps SDK and MCP Apps bridge.
+
+## Current status
+
+GPT IDE is now implemented on `main` as a production-oriented local development workspace. The current scope is a single-user local or controlled-host deployment, not a public multi-tenant IDE service.
+
+| Area | Status |
+|---|---|
+| ChatGPT App workbench | Implemented |
+| MCP server and typed tools | Implemented |
+| Local workspace runtime | Implemented |
+| Security controls | Implemented with documented residual risks |
+| CI | Typecheck, tests, build, and lint |
+| Public multi-user deployment | Not supported yet |
 
 ## What is included
 
@@ -19,19 +34,19 @@ A full coding workspace rendered **inside ChatGPT**. ChatGPT supplies the model 
 
 ```text
 ChatGPT model and conversation
-        │
-        │ MCP tool calls + app UI
-        ▼
+        |
+        | MCP tool calls + app UI
+        v
 GPT IDE MCP server (/mcp)
-        │
-        ├── sandboxed filesystem
-        ├── Git + unified patches
-        ├── bounded process runner
-        ├── repository search
-        └── local checkpoints
+        |
+        +-- sandboxed filesystem
+        +-- Git + unified patches
+        +-- bounded process runner
+        +-- repository search
+        +-- local checkpoints
 
 ChatGPT iframe
-        └── React + CodeMirror workbench
+        +-- React + CodeMirror workbench
 ```
 
 The model continues to run in ChatGPT. This app does not call the OpenAI API or Codex App Server. It therefore does not require an OpenAI API key for model reasoning. ChatGPT plan limits still apply; the project does not create unlimited usage.
@@ -81,22 +96,34 @@ curl http://127.0.0.1:8000/health
 1. Build the widget and start the server.
 2. Expose port `8000` over HTTPS, for example with `ngrok http 8000`.
 3. Add the tunnel hostname to `ALLOWED_HOSTS` and restart the server.
-4. In ChatGPT, open **Settings → Apps & Connectors → Advanced settings** and enable Developer Mode.
+4. In ChatGPT, open **Settings -> Apps & Connectors -> Advanced settings** and enable Developer Mode.
 5. Create a new app and use `https://YOUR-TUNNEL-HOST/mcp` as the MCP URL.
 6. Refresh the app after tool metadata or widget changes.
-7. Ask ChatGPT: **“Open GPT IDE for this workspace.”**
+7. Ask ChatGPT: **"Open GPT IDE for this workspace."**
 
 ChatGPT requires the MCP endpoint to be reachable over HTTPS. See `docs/deployment.md` for tunnel and production guidance.
+
+## Safer local setup
+
+For normal local work, keep the server bound to loopback and limit the command allowlist to only what the target repository needs.
+
+```env
+HOST=127.0.0.1
+ALLOWED_HOSTS=localhost,127.0.0.1,YOUR-TUNNEL-HOST
+COMMAND_ALLOWLIST=npm,node,git
+```
+
+For higher-risk repositories, run the server inside a disposable container or VM with a dedicated workspace mount and no personal credentials.
 
 ## Keyboard shortcuts
 
 | Action | Shortcut |
 |---|---|
-| Save active file | `Ctrl/⌘ S` |
-| Quick open | `Ctrl/⌘ P` |
-| Toggle terminal | `Ctrl/⌘ J` |
-| Open workspace search | `Ctrl/⌘ Shift F` |
-| Send custom AI task | `Ctrl/⌘ Enter` in the AI prompt |
+| Save active file | `Ctrl/Cmd S` |
+| Quick open | `Ctrl/Cmd P` |
+| Toggle terminal | `Ctrl/Cmd J` |
+| Open workspace search | `Ctrl/Cmd Shift F` |
+| Send custom AI task | `Ctrl/Cmd Enter` in the AI prompt |
 
 ## Security defaults
 
@@ -119,8 +146,16 @@ apps/
   widget/     React/CodeMirror ChatGPT workbench
 packages/
   core/       Filesystem, search, Git, patch, command, checkpoint runtime
-docs/         Architecture, security, deployment, and tool reference
+docs/         Architecture, security, deployment, roadmap, and tool reference
 ```
+
+## Project governance
+
+- Roadmap: `docs/ROADMAP.md`
+- Security model: `docs/security.md`
+- Deployment guide: `docs/deployment.md`
+- Tool reference: `docs/tools.md`
+- Contribution guide: `CONTRIBUTING.md`
 
 ## Official references
 
